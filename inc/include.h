@@ -13,12 +13,16 @@
 #include <time.h>
 #include <ctype.h>
 
+
 #ifdef __linux__
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 #endif
 
 

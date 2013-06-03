@@ -3,5 +3,7 @@
 
 extern int
 input_check(char *);
+extern void
+init_socket(void);
 
 #endif

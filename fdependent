@@ -1,3 +1,7 @@
 main.o: main.c inc/include.h inc/defs.h inc/externals.h inc/vars.h
+maintain.o: maintain.c inc/include.h inc/defs.h inc/maintain.h \
+ src/error_handle.c
+network.o: network.c inc/include.h inc/defs.h inc/network.h \
+ src/net_init.c
 textual.o: textual.c inc/include.h inc/defs.h inc/textual.h \
  src/content_check.c

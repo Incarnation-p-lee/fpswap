@@ -2,7 +2,8 @@
 .SUFFIXES: .o .a .out .so
 
 
-SRC       =main.c textual.c
+SRC       =main.c maintain.c \
+           network.c textual.c 
 
 
 CC        =gcc

@@ -14,13 +14,14 @@
 int
 main(int argc, char **argv)
 {
+  fprintf(stdout, "Welcome to fswap, type"
+    "your operation [put].\n");
+ 
   while(1)
   {
-    fprintf(stdout, "Welcome to fswap, type"
-      "your operation [put].\n");
- 
     if(!input_check(gets(command_line)))
     {
+      init_socket();
     }
 
   }
