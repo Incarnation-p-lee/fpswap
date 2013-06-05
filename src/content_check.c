@@ -4,7 +4,7 @@
 /* REVISION:                               */
 /* 20130531   Created                      */
 /*-----------------------------------------*/
-int
+OPT
 input_check(char *fname)
 {
   char *item, *skip;
@@ -21,17 +21,17 @@ input_check(char *fname)
   {
     ignore_space(&skip);
     cpy_filename(get_filename, skip);
-    return 0;
+    return GET;
   }
 
   if(!strcmp(item, "put"))
   {
     ignore_space(&skip);
     cpy_filename(put_filename, skip);
-    return 0;
+    return PUT;
   }
   
-  return 1;
+  return NA;
 }
 
 

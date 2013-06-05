@@ -9,7 +9,7 @@ void
 init_socket()
 {
 #ifdef __linux__
-  pid_t pid;
+  pthread_t rev_thread = 0;
 #endif
 
   sock_loc = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,20 +30,16 @@ init_socket()
     inet_addr(REMOTE_IP);
   addr_loc.sin_port = htons(NET_PORT);
 
-  if(-1 == bind(sock_rmt,
-    (const struct sockaddr *)&addr_rmt,
-    sizeof(addr_rmt)))
+  if(-1 == bind(sock_loc,
+    (const struct sockaddr *)&addr_loc,
+    sizeof(addr_loc)))
     error_handle("bind");
 
 #ifdef __linux__
-
-  if(pid = fork(), 0 == pid)
-    server_start(); 
-  else if(0 > pid)
-    error_handle("fork");
-  else
-    ;
-
+  if(0 != pthread_create(&rev_thread, NULL,
+       (void* (*)(void*))server_start, NULL))
+    error_handle("pthread");
+  
 #endif
 
   return;
@@ -58,19 +54,18 @@ server_start()
 
   while(1)
   {
-    if(-1 == listen(sock_rmt, LISTEN_COUNT))
+    if(-1 == listen(sock_loc, LISTEN_COUNT))
       error_handle("listen");
        
     len = (socklen_t)sizeof(addr_tmp);
-    sock_tmp = accept(sock_rmt, 
+    sock_tmp = accept(sock_loc, 
       (struct sockaddr*)&addr_tmp,
       &len);
 
     if(-1 == sock_tmp)
       error_handle("accept");
-    
-    
-    
+   
+    data_recv(sock_tmp, rev_buf); 
   }
   
   return;   

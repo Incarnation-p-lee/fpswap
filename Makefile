@@ -3,13 +3,14 @@
 
 
 SRC       =main.c maintain.c \
-           network.c textual.c 
+           network.c textual.c \
+           iofile.c
 
 
 CC        =gcc
-CFLAG     =-c -g -Wall -pg
+CFLAG     =-c -g -Wall -pg -pthread
 DFLAG     =-shared -fPIC
-LFLAG     =-pg
+LFLAG     =-pg -pthread
 
 OBJ       =$(patsubst %.c, %.o, $(SRC))
 DEPS      =fdependent

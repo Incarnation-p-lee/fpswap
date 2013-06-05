@@ -5,7 +5,7 @@
 extern char get_filename[FILENAME_LEN];
 extern char put_filename[FILENAME_LEN];
 
-int
+OPT
 input_check(char *);
 static void
 ignore_space(char **);

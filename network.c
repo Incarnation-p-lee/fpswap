@@ -3,3 +3,4 @@
 #include "network.h"
 
 #include "net_init.c"
+#include "net_op.c"

@@ -7,6 +7,7 @@ static char command_line[COMMAND_LEN];
 
 /* net related */
 char rev_buf[BUFFER_LEN];
+char *send_buf;
 struct sockaddr_in addr_rmt;
 struct sockaddr_in addr_loc;
 int sock_loc;
