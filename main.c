@@ -29,7 +29,7 @@ main(int argc, char **argv)
       case PUT:
         fsize = file_buf(put_filename);
         fprintf(stdout, "%d, %s\n", errno, strerror(errno));
-        data_send(sock_rmt, send_buf, fsize);
+//        data_send(sock_rmt, send_buf, fsize);
         fprintf(stdout, "%d, %s\n", errno, strerror(errno));
         break;
       case GET:
