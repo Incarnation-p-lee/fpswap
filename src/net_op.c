@@ -8,15 +8,8 @@ void
 data_send(int sock, char *buf, int len)
 {
   assert(NULL != buf && len > 0);
- 
-  if(connect(sock_loc, 
-    (const struct sockaddr*)&addr_rmt,
-    sizeof(addr_rmt)))
-    error_handle("connect"); 
   
   net_send(sock, buf, len);
-
-  shutdown(sock, SHUT_RDWR);
   
   return;
 }
@@ -27,7 +20,6 @@ net_send(int sock, char *buf, int len)
   int index, padding;
   assert(NULL != buf && len > 0);
 
-  index = 0;
   padding = len % SEND_LEN;
   if(0 != padding)
   {
@@ -36,7 +28,7 @@ net_send(int sock, char *buf, int len)
     fflush(stdout);
   }
   
-  index += padding;
+  index = 0;
   while(len != padding + index)
   {
     if(SEND_LEN != send(sock, 
@@ -46,7 +38,6 @@ net_send(int sock, char *buf, int len)
     index += SEND_LEN;
   }
   
-  free(buf);
   return;
 }
 

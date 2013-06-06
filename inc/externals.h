@@ -11,5 +11,7 @@ extern int
 file_buf(const char*);
 extern void
 error_handle(const char*);
+extern void
+env_reset(void);
 
 #endif

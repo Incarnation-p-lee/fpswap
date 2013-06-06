@@ -5,7 +5,7 @@
 /* 20130604   Created                      */
 /*-----------------------------------------*/
 int
-file_buf(const char *fname)
+file_buf(char *fname)
 {
   FILE *filep;
   int length;

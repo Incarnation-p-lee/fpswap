@@ -6,6 +6,6 @@ extern char *send_buf;
 
 
 int
-file_buf(const char*);
+file_buf(char*);
 
 #endif
