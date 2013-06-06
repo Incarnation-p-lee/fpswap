@@ -15,7 +15,6 @@
 
 
 #ifdef __linux__
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/time.h>
@@ -29,8 +28,10 @@
 #endif
 
 
-#ifdef __WINDOWS__
-
+#ifdef WIN32
+#include <winsock2.h>
+#include <process.h>
+#pragma comment(lib, "ws2_32.lib")
 #endif
 
 

@@ -10,7 +10,14 @@ char rev_buf[BUFFER_LEN];
 char *send_buf;
 struct sockaddr_in addr_rmt;
 struct sockaddr_in addr_loc;
-int sock_clt;
+
+#ifdef __linux__
 int sock_srv;
+int sock_clt;
+#endif
+#ifdef _WINDOWS_
+SOCKET sock_srv;
+SOCKET sock_clt;
+#endif
 
 #endif

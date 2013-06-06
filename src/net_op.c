@@ -23,7 +23,13 @@ net_send(int sock, char *buf, int len)
   padding = len % SEND_LEN;
   if(0 != padding)
   {
-    send(sock, buf, padding, MSG_MORE);
+    send(sock, buf, padding,
+#ifdef __linux__
+      MSG_MORE);
+#endif
+#ifdef WIN32
+      0); 
+#endif
     printf("%s\n",strerror(errno));
     fflush(stdout);
   }
@@ -32,7 +38,13 @@ net_send(int sock, char *buf, int len)
   while(len != padding + index)
   {
     if(SEND_LEN != send(sock, 
-      buf + index, SEND_LEN, MSG_MORE))
+		buf + index, SEND_LEN, 
+#ifdef __linux__
+	  MSG_MORE))
+#endif
+#ifdef WIN32
+	  0))
+#endif
       error_handle("send");
       
     index += SEND_LEN;
@@ -52,6 +64,7 @@ data_recv(int sock, char *buf)
     BUFFER_LEN, MSG_WAITALL);
   if(-1 == len)
     error_handle("recv");
+  fprintf(stdout, "recv =>%d \n", len);
  
   fprintf(stdout, "%s\n", buf);
   return;

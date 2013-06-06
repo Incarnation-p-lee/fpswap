@@ -23,5 +23,7 @@ static void *
 server_start(void*);
 static void 
 net_send(int, char*, int);
+static void
+init_socket_parms(void);
 
 #endif
