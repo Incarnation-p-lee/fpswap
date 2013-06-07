@@ -7,21 +7,20 @@
 void
 data_send(int sock, char *buf, int len)
 {
-  int index, padding;
+  int index;
   assert(NULL != buf && len > 0);
 
   net_send(sock, put_filename,
     FILENAME_LEN);
 
-  padding = len % SEND_LEN;
-  if(0 != padding)
+  index = len % SEND_LEN;
+  if(0 != index)
   {
-    net_send(sock, buf, padding);
+    net_send(sock, buf, index);
     printf("%s\n",strerror(errno));
     fflush(stdout);
   }
   
-  index = padding;
   while(len != index)
   {
     net_send(sock, buf + index, SEND_LEN);
@@ -53,15 +52,38 @@ net_send(int sock, char *buf, int len)
 void
 data_recv(int sock, char *buf)
 {
-  int len;
+  int len, fsize, index;
   assert(NULL != buf);
+  
+  do
+  {
+    len = recv(sock, buf,
+      FILENAME_LEN, MSG_WAITALL);
+    if(-1 == len)
+      error_handle("recv");
+    fsize = *(int*)(buf + LENGTH_INDEX);
+    fprintf(stdout, "File Name: %s.\n"
+	  "File Size: %d[Byte].\n", buf, fsize); 
 
-  len = recv(sock, buf,
-    BUFFER_LEN, MSG_WAITALL);
-  if(-1 == len)
-    error_handle("recv");
-  fprintf(stdout, "recv =>%d \n", len);
- 
-  fprintf(stdout, "%s\n", buf);
+    memset(buf, 0, FILENAME_LEN);
+    index = fsize % SEND_LEN; 
+    if(0 != index)
+    {
+      len = recv(sock, buf, 
+        index, MSG_WAITALL);
+      if(-1 == len)
+        error_handle("recv");
+    }
+    while(fsize != index)
+    {
+      len = recv(sock, buf + index, 
+        SEND_LEN, MSG_WAITALL);
+      if(-1 == len)
+        error_handle("recv");
+      index += SEND_LEN;
+    }
+   
+    fprintf(stdout, "%s\n", buf);
+  }while(1);
   return;
 }

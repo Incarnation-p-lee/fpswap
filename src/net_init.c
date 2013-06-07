@@ -23,12 +23,12 @@ init_socket_parms()
   if(WSAStartup(wVersionRequest, &wdata))
     error_handle("WSAStartup");
 
-  sock_loc = socket(AF_INET, 
+  sock_srv = socket(AF_INET, 
 	SOCK_STREAM, IPPROTO_TCP);
-  sock_rmt = socket(AF_INET, 
+  sock_clt = socket(AF_INET, 
 	SOCK_STREAM, IPPROTO_TCP);
-  assert(-1 != sock_loc && 
-    -1 != sock_rmt);
+  assert(-1 != sock_srv && 
+    -1 != sock_clt);
 
   memset(&addr_rmt, 0, sizeof(addr_rmt));
   memset(&addr_loc, 0, sizeof(addr_loc));
@@ -43,14 +43,14 @@ init_socket_parms()
     inet_addr(LOCAL_IP);
   addr_loc.sin_port = htons(LOC_PORT);
 
-  if(-1 == bind(sock_loc,
+  if(-1 == bind(sock_srv,
     (const struct sockaddr *)&addr_loc,
     sizeof(addr_loc)))
     error_handle("bind");
 
   if(!CreateThread(NULL, 0, 
     (LPTHREAD_START_ROUTINE)server_start, 
-	0, 0, &threadid))
+	&sock_srv, 0, &threadid))
     error_handle("CreateThread");
 
   return;
@@ -111,12 +111,12 @@ server_start(void *sock)
   socklen_t len;
 #endif
 
+  if(-1 == listen(*(int*)sock, 
+    LISTEN_COUNT))
+    error_handle("listen");
+
   while(1)
   {
-    if(-1 == listen(*(int*)sock, 
-      LISTEN_COUNT))
-      error_handle("listen");
-       
     len = sizeof(addr_tmp);
     sock_tmp = accept(*(int*)sock, 
       (struct sockaddr*)&addr_tmp,

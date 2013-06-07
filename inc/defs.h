@@ -11,21 +11,21 @@
 typedef enum OPERATION{NA, PUT, GET}OPT;
 
 /* net related */
-#define BUFFER_LEN      4096
+#define BUFFER_LEN      (1024 << 6)
 
 #ifdef __linux__
 #define RMT_PORT        (8192 << 1)
 #define LOC_PORT        (8192 << 2)
 /* Hard code IP for temporay */
 #define REMOTE_IP       "192.168.0.100"
-#define LOCAL_IP        "192.168.0.103"
+#define LOCAL_IP        "192.168.0.101"
 #endif
 
 #ifdef WIN32
 #define RMT_PORT        (8192 << 2)
 #define LOC_PORT        (8192 << 1)
 /* Hard code IP for temporay */
-#define REMOTE_IP       "192.168.0.103"
+#define REMOTE_IP       "192.168.0.101"
 #define LOCAL_IP        "192.168.0.100"
 #endif
 
