@@ -30,3 +30,8 @@ file_buf(char *fname)
   return length;
 }
 
+void
+file_write(char *buf, int len)
+{
+l 
+}

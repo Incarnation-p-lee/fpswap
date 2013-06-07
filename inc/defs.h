@@ -14,7 +14,7 @@ typedef enum OPERATION{
 }OPT;
 
 /* net related */
-#define BUFFER_LEN      4096
+#define BUFFER_LEN      (1024 << 6)
 
 #ifdef __linux__
 #define RMT_PORT        (8192 << 1)
