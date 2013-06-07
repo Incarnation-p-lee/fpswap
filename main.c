@@ -33,6 +33,10 @@ main(int argc, char **argv)
         break;
       case GET:
         break;
+      case CONT:
+        fprintf(stdout, "Your operation,"
+          "PLEASE!\n");
+        break;
     }
   }
   return EXIT_SUCCESS;

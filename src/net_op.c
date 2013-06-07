@@ -15,11 +15,7 @@ data_send(int sock, char *buf, int len)
 
   padding = len % SEND_LEN;
   if(0 != padding)
-  {
     net_send(sock, buf, padding);
-    printf("%s\n",strerror(errno));
-    fflush(stdout);
-  }
   
   index = padding;
   while(len != index)

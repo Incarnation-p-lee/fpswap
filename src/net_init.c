@@ -53,6 +53,15 @@ init_socket_parms()
 	0, 0, &threadid))
     error_handle("CreateThread");
 
+  while(1)
+  {
+    if(!connect(sock_clt, 
+      (const struct sockaddr*)&addr_rmt,
+      sizeof(addr_rmt)))
+      break;
+    Sleep(DELAY << 10);
+  }
+
   return;
 }
 #endif
@@ -86,14 +95,19 @@ init_socket_parms()
     sizeof(addr_loc)))
     error_handle("bind");
 
-  if(connect(sock_clt, 
-    (const struct sockaddr*)&addr_rmt,
-    sizeof(addr_rmt)))
-    error_handle("connect"); 
-
   if(0 != pthread_create(&rev_thread, NULL,
        server_start, &sock_srv))
     error_handle("pthread");
+
+  while(1)
+  {
+    if(!connect(sock_clt, 
+      (const struct sockaddr*)&addr_rmt,
+      sizeof(addr_rmt)))
+      break;
+    sleep(DELAY);
+  }
+
   
   return;
 }

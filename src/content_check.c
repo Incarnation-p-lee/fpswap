@@ -10,6 +10,9 @@ input_check(char *fname)
   char *item, *skip;
 
   assert(NULL != fname);
+
+  if(NUL == *fname)
+    return CONT;
   
   ignore_space(&fname);
   skip = strtok(fname, SPACE);

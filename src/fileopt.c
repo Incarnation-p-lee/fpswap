@@ -12,7 +12,7 @@ file_buf(char *fname)
   int padding;
   assert(NULL != fname);
   
-  filep = fopen(fname, "r");
+  filep = fopen(fname, "rb");
   fseek(filep, 0, SEEK_END);
   length = (int)ftell(filep);
   *(int*)(fname + LENGTH_INDEX) = length;
