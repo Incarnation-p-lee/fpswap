@@ -11,14 +11,15 @@ extern struct sockaddr_in addr_rmt;
 extern struct sockaddr_in addr_loc;
 extern int sock_clt;
 extern int sock_srv;
+extern char put_filename[FILENAME_LEN];
 
 
 void
 init_socket(void);
 void
-data_send(int, char*, int);
-void
 data_recv(int, char*);
+void
+data_send(int, char*, int);
 static void *
 server_start(void*);
 static void 

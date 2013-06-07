@@ -7,9 +7,26 @@
 void
 data_send(int sock, char *buf, int len)
 {
+  int index, padding;
   assert(NULL != buf && len > 0);
+
+  net_send(sock, put_filename,
+    FILENAME_LEN);
+
+  padding = len % SEND_LEN;
+  if(0 != padding)
+  {
+    net_send(sock, buf, padding);
+    printf("%s\n",strerror(errno));
+    fflush(stdout);
+  }
   
-  net_send(sock, buf, len);
+  index = padding;
+  while(len != index)
+  {
+    net_send(sock, buf + index, SEND_LEN);
+    index += SEND_LEN;
+  }
   
   return;
 }
@@ -17,42 +34,21 @@ data_send(int sock, char *buf, int len)
 static void
 net_send(int sock, char *buf, int len)
 {
-  int index, padding;
-  assert(NULL != buf && len > 0);
-
-  padding = len % SEND_LEN;
-  if(0 != padding)
-  {
-    send(sock, buf, padding,
-#ifdef __linux__
-      MSG_MORE);
-#endif
-#ifdef WIN32
-      0); 
-#endif
-    printf("%s\n",strerror(errno));
-    fflush(stdout);
-  }
-  
-  index = 0;
-  while(len != padding + index)
-  {
-    if(SEND_LEN != send(sock, 
-		buf + index, SEND_LEN, 
+  if(len != send(sock, buf, len,
 #ifdef __linux__
 	  MSG_MORE))
-#endif
+#else 
 #ifdef WIN32
-	  0))
+	  MSG_OOB))
+#else
+#pragma message("UNKNOWN PLATFORM.\n")
+    0))
+#endif
 #endif
       error_handle("send");
-      
-    index += SEND_LEN;
-  }
-  
+
   return;
 }
-
 
 void
 data_recv(int sock, char *buf)

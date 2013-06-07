@@ -14,7 +14,8 @@ file_buf(char *fname)
   
   filep = fopen(fname, "r");
   fseek(filep, 0, SEEK_END);
-  length = ftell(filep);
+  length = (int)ftell(filep);
+  *(int*)(fname + LENGTH_INDEX) = length;
   rewind(filep);
   send_buf = (char*)malloc(length);
   
