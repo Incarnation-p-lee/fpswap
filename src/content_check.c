@@ -14,6 +14,9 @@ input_check(char *fname)
   if(NUL == *fname)
     return CONT;
   
+  if(LENGTH_INDEX < strlen(fname))
+    error_handle("file name too long");
+  
   ignore_space(&fname);
   skip = strtok(fname, SPACE);
   item = skip;

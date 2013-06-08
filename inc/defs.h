@@ -21,14 +21,14 @@ typedef enum OPERATION{
 #define LOC_PORT        (8192 << 2)
 /* Hard code IP for temporay */
 #define REMOTE_IP       "192.168.0.100"
-#define LOCAL_IP        "192.168.0.101"
+#define LOCAL_IP        "192.168.0.103"
 #endif
 
 #ifdef WIN32
 #define RMT_PORT        (8192 << 2)
 #define LOC_PORT        (8192 << 1)
 /* Hard code IP for temporay */
-#define REMOTE_IP       "192.168.0.101"
+#define REMOTE_IP       "192.168.0.103"
 #define LOCAL_IP        "192.168.0.100"
 #endif
 

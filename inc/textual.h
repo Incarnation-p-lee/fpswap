@@ -11,6 +11,8 @@ static void
 ignore_space(char **);
 static void
 cpy_filename(char *, char *);
+extern void
+error_handle(const char*);
 
 
 #endif

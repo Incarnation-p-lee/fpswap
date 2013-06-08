@@ -49,6 +49,7 @@ void
 data_recv(int sock, char *buf)
 {
   int len, fsize, index;
+  FILE *wfile;
   assert(NULL != buf);
   
   do
@@ -57,10 +58,12 @@ data_recv(int sock, char *buf)
       FILENAME_LEN, MSG_WAITALL);
     if(-1 == len)
       error_handle("recv");
+
     fsize = *(int*)(buf + LENGTH_INDEX);
     fprintf(stdout, "File Name: %s.\n"
 	  "File Size: %d[Byte].\n", buf, fsize); 
-
+    
+    wfile = file_create(buf);
     memset(buf, 0, FILENAME_LEN);
     index = fsize % SEND_LEN; 
     if(0 != index)
@@ -69,6 +72,7 @@ data_recv(int sock, char *buf)
         index, MSG_WAITALL);
       if(-1 == len)
         error_handle("recv");
+      file_write(wfile, buf, index);
     }
     while(fsize != index)
     {
@@ -77,9 +81,12 @@ data_recv(int sock, char *buf)
       if(-1 == len)
         error_handle("recv");
       index += SEND_LEN;
+      file_write(wfile,
+        buf + index, SEND_LEN);
     }
    
     fprintf(stdout, "%s\n", buf);
+    fclose(wfile);
   }while(1);
   return;
 }
