@@ -44,11 +44,11 @@ file_create(char *fname)
 }
 
 void
-file_write(FILE *wfile, char *buf, int len)
+file_write(FILE **wfile, char *buf, int len)
 {
   assert(NULL != buf && NULL != wfile);
   
-  if(1 != fwrite(buf, len, 1, wfile))
+  if(1 != fwrite(buf, len, 1, *wfile))
     error_handle("fwrite");
 
   return;

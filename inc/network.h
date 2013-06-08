@@ -8,7 +8,7 @@ data_recv(int, char*);
 extern FILE *
 file_create(char*);
 extern void
-file_write(FILE*, char*, int);
+file_write(FILE**, char*, int);
 
 extern char rev_buf[BUFFER_LEN];
 extern struct sockaddr_in addr_rmt;

@@ -9,7 +9,7 @@ error_handle(const char*);
 int
 file_buf(char*);
 void
-file_write(FILE*, char*, int);
+file_write(FILE**, char*, int);
 FILE*
 file_create(char*);
 

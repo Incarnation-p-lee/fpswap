@@ -72,7 +72,7 @@ data_recv(int sock, char *buf)
         index, MSG_WAITALL);
       if(-1 == len)
         error_handle("recv");
-      file_write(wfile, buf, index);
+      file_write(&wfile, buf, index);
     }
     while(fsize != index)
     {
@@ -80,9 +80,9 @@ data_recv(int sock, char *buf)
         SEND_LEN, MSG_WAITALL);
       if(-1 == len)
         error_handle("recv");
-      index += SEND_LEN;
-      file_write(wfile,
+      file_write(&wfile,
         buf + index, SEND_LEN);
+      index += SEND_LEN;
     }
    
     fprintf(stdout, "%s\n", buf);
