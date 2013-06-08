@@ -19,9 +19,10 @@ incs      =./src
 INC       =-I$(inch) -I$(incs)
 SHELL     =/bin/sh
 TARGET    =fswap.out
+OBJ_DR    =obj
 
 
-vpath %.o ./obj
+vpath %.o $(OBJ_DR)
 
 .PHONY:ALL LINK clean
 
@@ -36,6 +37,9 @@ $(OBJ):%.o:%.c
 
 $(DEPS):$(SRC)
 	$(CC) $(INC) -MM $^ >$@
+ifneq ($(OBJ_DR), $(wildcard $(OBJ_DR)))
+	mkdir $(OBJ_DR)
+endif
 
 $(TARGET):$(OBJ)
 	$(MAKE) LINK

@@ -33,5 +33,4 @@ file_buf(char *fname)
 void
 file_write(char *buf, int len)
 {
-l 
 }
