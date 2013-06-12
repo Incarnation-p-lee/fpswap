@@ -22,6 +22,10 @@ input_check(char *fname)
   item = skip;
   skip = strtok(NULL, SPACE);
 
+
+  if(!strcmp(item, "exit"))
+    return EXIT;
+
   /* Now only has put operation */
   if(!strcmp(item, "get"))
   {

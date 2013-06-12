@@ -8,7 +8,7 @@ data_recv(int, char*);
 extern FILE *
 file_create(char*);
 extern void
-file_write(FILE**, char*, int);
+file_write(FILE*, char*, int);
 
 extern char rev_buf[BUFFER_LEN];
 extern struct sockaddr_in addr_rmt;
@@ -29,5 +29,7 @@ static void
 net_send(int, char*, int);
 static void
 init_socket_parms(void);
+static void
+net_recv_write(int, char*, int, FILE*);
 
 #endif

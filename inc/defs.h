@@ -10,7 +10,7 @@
 #define DELAY           2
 
 typedef enum OPERATION{
-  NA, PUT, GET, CONT,                     
+  NA, PUT, GET, CONT, EXIT,
 }OPT;
 
 /* net related */
@@ -21,7 +21,7 @@ typedef enum OPERATION{
 #define LOC_PORT        (8192 << 2)
 /* Hard code IP for temporay */
 #define REMOTE_IP       "192.168.0.100"
-#define LOCAL_IP        "192.168.0.103"
+#define LOCAL_IP        "192.168.0.104"
 #endif
 
 #ifdef WIN32

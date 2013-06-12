@@ -16,7 +16,7 @@ main(int argc, char **argv)
 {
   int fsize;
   fprintf(stdout, "Welcome to fswap, type"
-    "your operation [put].\n");
+    " your operation [put].\n");
  
   init_socket();
   while(1)
@@ -37,6 +37,9 @@ main(int argc, char **argv)
         fprintf(stdout, "Your operation,"
           "PLEASE!\n");
         break;
+      case EXIT:
+        fprintf(stdout, "Bye!\n");
+        exit(EXIT_SUCCESS);
     }
   }
   return EXIT_SUCCESS;
