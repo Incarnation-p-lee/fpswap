@@ -6,6 +6,7 @@
 /*-----------------------------------------*/
 void init_socket()
 {
+  net_setup();
   init_socket_parms();
 
   return;
@@ -35,13 +36,13 @@ init_socket_parms()
 
   addr_rmt.sin_family = AF_INET;
   addr_rmt.sin_addr.s_addr = 
-    inet_addr(REMOTE_IP);
-  addr_rmt.sin_port = htons(RMT_PORT);
+    inet_addr(remote_ip);
+  addr_rmt.sin_port = htons(remote_ip);
 
   addr_loc.sin_family = AF_INET;
   addr_loc.sin_addr.s_addr = 
-    inet_addr(LOCAL_IP);
-  addr_loc.sin_port = htons(LOC_PORT);
+    inet_addr(local_ip);
+  addr_loc.sin_port = htons(local_ip);
 
   if(-1 == bind(sock_srv,
     (const struct sockaddr *)&addr_loc,
@@ -82,13 +83,13 @@ init_socket_parms()
 
   addr_rmt.sin_family = AF_INET;
   addr_rmt.sin_addr.s_addr = 
-    inet_addr(REMOTE_IP);
-  addr_rmt.sin_port = htons(RMT_PORT);
+    inet_addr(remote_ip);
+  addr_rmt.sin_port = htons(remote_port);
 
   addr_loc.sin_family = AF_INET;
   addr_loc.sin_addr.s_addr = 
-    inet_addr(LOCAL_IP);
-  addr_loc.sin_port = htons(LOC_PORT);
+    inet_addr(local_ip);
+  addr_loc.sin_port = htons(local_port);
 
   if(-1 == bind(sock_srv,
     (const struct sockaddr *)&addr_loc,

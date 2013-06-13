@@ -30,25 +30,24 @@ file_buf(char *fname)
   return length;
 }
 
-FILE *
+void
 file_create(char *fname)
 {
-  FILE *wfname;
   assert(NULL != fname);
   
-  wfname = fopen(fname, "w");
-  if(NULL == wfname)
+  fwriter = fopen(fname, "w");
+  if(NULL == fwriter)
     error_handle("fopen");
   
-  return wfname;
+  return;
 }
 
 void
-file_write(FILE *wfile, char *buf, int len)
+file_write(char *buf, int len)
 {
-  assert(NULL != buf && NULL != wfile);
+  assert(NULL != buf);
   
-  if(1 != fwrite(buf, len, 1, wfile))
+  if(1 != fwrite(buf, len, 1, fwriter))
     error_handle("fwrite");
 
   return;

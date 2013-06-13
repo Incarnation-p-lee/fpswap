@@ -49,7 +49,6 @@ void
 data_recv(int sock, char *buf)
 {
   int len, fsize, cnt;
-  FILE *wfile;
   assert(NULL != buf);
   
   do
@@ -63,53 +62,52 @@ data_recv(int sock, char *buf)
     fprintf(stdout, "File Name: %s.\n"
 	  "File Size: %d[Byte].\n", buf, fsize); 
     
-    wfile = file_create(buf);
+    file_create(buf);
     cnt = fsize % BUFFER_LEN;
 
     if(0 != cnt)
-      net_recv_write(sock, buf, cnt, wfile);
+      net_recv_write(sock, buf, cnt);
 
     while(fsize != cnt)
     {
-      net_recv_write(sock, buf, BUFFER_LEN,
-        wfile);
+      net_recv_write(sock, buf, BUFFER_LEN);
       cnt += BUFFER_LEN;
     }
    
-    fprintf(stdout, "Received, %d KB.\n", fsize >> 10);
-    fclose(wfile);
+    fprintf(stdout, "\nReceived, %d KB.\n",
+      fsize >> 10);
+    fclose(fwriter);
   }while(1);
   return;
 }
 
 static void
-net_recv_write(int sock, char *buf,
-  int len, FILE *wfile)
+net_recv_write(int sock, char *buf, int len)
 {
-  int index;
+  int index, tmp;
 
   memset(buf, 0, FILENAME_LEN);
   index = len % SEND_LEN; 
 
   if(0 != index)
   {
-    len = recv(sock, buf, 
+    tmp = recv(sock, buf, 
       index, MSG_WAITALL);
-    if(-1 == len)
+    if(-1 == tmp)
       error_handle("recv");
-    file_write(wfile, buf, index);
+    file_write(buf, index);
   }
 
   while(len != index)
   {
-    len = recv(sock, buf + index, 
+    tmp = recv(sock, buf + index, 
       SEND_LEN, MSG_WAITALL);
-    if(-1 == len)
+    if(-1 == tmp)
       error_handle("recv");
-    file_write(wfile,
-      buf + index, SEND_LEN);
+    file_write(buf + index, SEND_LEN);
     index += SEND_LEN;
   }
   fprintf(stdout, ".");
+
   return;
 }

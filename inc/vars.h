@@ -7,14 +7,22 @@ char command_line[COMMAND_LEN];
 
 /* net related */
 char rev_buf[BUFFER_LEN];
-char *send_buf;
 struct sockaddr_in addr_rmt;
 struct sockaddr_in addr_loc;
+int local_port;
+int remote_port;
+char local_ip[IP_LENGTH];
+char remote_ip[IP_LENGTH];
+
+/* file related */
+char *send_buf;
+FILE *fwriter;
 
 #ifdef __linux__
 int sock_srv;
 int sock_clt;
 #endif
+
 #ifdef _WINDOWS_
 SOCKET sock_srv;
 SOCKET sock_clt;
