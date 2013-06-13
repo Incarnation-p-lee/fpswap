@@ -37,14 +37,14 @@ init_socket_parms()
   addr_rmt.sin_family = AF_INET;
   addr_rmt.sin_addr.s_addr = 
     inet_addr(remote_ip);
-  addr_rmt.sin_port = htons(remote_ip);
+  addr_rmt.sin_port = htons(remote_port);
 
   addr_loc.sin_family = AF_INET;
   addr_loc.sin_addr.s_addr = 
     inet_addr(local_ip);
-  addr_loc.sin_port = htons(local_ip);
+  addr_loc.sin_port = htons(local_port);
 
-  if(-1 == bind(sock_srv,
+  if(0 != bind(sock_srv,
     (const struct sockaddr *)&addr_loc,
     sizeof(addr_loc)))
     error_handle("bind");

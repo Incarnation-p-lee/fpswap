@@ -8,8 +8,7 @@ void
 net_setup()
 {
   FILE *conf;
-  const int len = 64;
-  char buf[len];
+  char buf[64];
 
   conf = fopen(FILE_CONFIG, "r");
   if(NULL == conf)
@@ -19,10 +18,12 @@ net_setup()
   memset(remote_ip, 0, IP_LENGTH);
   
   local_port = net_setup_handle(buf,
-    len, conf);
+    sizeof(buf), conf);
   remote_port = net_setup_handle(buf,
-    len, conf);
+    sizeof(buf), conf);
 
+  fclose(conf);
+  return;
 }
 
 static int
