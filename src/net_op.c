@@ -57,6 +57,13 @@ frame_send(int sock, char *buf, int len)
     net_send(sock, buf + index, SEND_LEN);
     index += SEND_LEN;
   }
+#ifdef __linux__
+  usleep(SEND_DELAY);
+#endif
+
+#ifdef _WINDOWS_
+  Sleep(SEND_DELAY);
+#endif
 
   return;
 }
@@ -78,13 +85,6 @@ net_send(int sock, char *buf, int len)
 #endif
       error_handle("send");
 
-#ifdef __linux__
-    usleep(SEND_DELAY);
-#endif
-
-#ifdef _WINDOWS_
-    Sleep(SEND_DELAY);
-#endif
 
   return;
 }

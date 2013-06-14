@@ -7,7 +7,7 @@
 #define NUL             (char)0
 #define SPACE           " "
 #define READ_LEN        4096
-#define SEND_DELAY      8
+#define SEND_DELAY      1
 #define DELAY           2
 #define SPLITER         ":"
 #define FREAD_LEN       (1024 << 10)
