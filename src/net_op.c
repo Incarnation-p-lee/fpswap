@@ -32,8 +32,10 @@ data_send(char *fname, char *buf,
     fread(buf, FREAD_LEN, 1, filep);
     frame_send(sock, buf, FREAD_LEN);
     index += FREAD_LEN;
+    fprintf(stdout, ".");
   }
-
+  
+  fprintf(stdout, "File sended.\n");
   fclose(filep);
   free(buf);
   
