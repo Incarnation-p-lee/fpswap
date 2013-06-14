@@ -14,7 +14,6 @@
 int
 main(int argc, char **argv)
 {
-  int fsize;
   fprintf(stdout, "Welcome to fswap, type"
     " your operation [put].\n");
  
@@ -27,8 +26,7 @@ main(int argc, char **argv)
         error_handle("Unknown operation");
         break;
       case PUT:
-        fsize = file_buf(put_filename);
-        data_send(sock_clt, send_buf, fsize);
+        data_send(put_filename, send_buf, sock_clt);
         env_reset();
         break;
       case GET:

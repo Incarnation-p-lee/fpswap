@@ -5,14 +5,46 @@
 /* 20130604   Created                      */
 /*-----------------------------------------*/
 void
-data_send(int sock, char *buf, int len)
+data_send(char *fname, char *buf,
+  int sock)
 {
-  int index;
+  FILE *filep;
+  int fsize;
+  register int index;
+  assert(NULL != buf && NULL != fname);
+ 
+  
+  filep = fopen(fname, "r");
+  fsize = file_buf(filep);
+  *(int*)(fname + LENGTH_INDEX) = fsize;
+  net_send(sock, fname, FILENAME_LEN);
+
+  send_buf = (char*)malloc(FREAD_LEN);
+  index = fsize % FREAD_LEN;
+  if(0 != index)
+  {
+    fread(send_buf, index, 1, filep);
+    frame_send(sock, send_buf, index);
+  }
+  
+  while(fsize != index)
+  {
+    fread(send_buf, FREAD_LEN, 1, filep);
+    frame_send(sock, send_buf, FREAD_LEN);
+    index += FREAD_LEN;
+  }
+
+  fclose(filep);
+  
+  return;
+}
+
+static void
+frame_send(int sock, char *buf, int len)
+{
+  register int index;
   assert(NULL != buf && len > 0);
-
-  net_send(sock, put_filename,
-    FILENAME_LEN);
-
+  
   index = len % SEND_LEN;
   if(0 != index)
     net_send(sock, buf, index);
@@ -20,15 +52,9 @@ data_send(int sock, char *buf, int len)
   while(len != index)
   {
     net_send(sock, buf + index, SEND_LEN);
-#ifdef __linux__
-    usleep(SEND_DELAY);
-#endif
-#ifdef _WINDOWS_
-    Sleep(SEND_DELAY);
-#endif
     index += SEND_LEN;
   }
-  
+
   return;
 }
 
@@ -39,6 +65,7 @@ net_send(int sock, char *buf, int len)
 #ifdef __linux__
 	  MSG_MORE))
 #else 
+
 #ifdef WIN32
 	  MSG_OOB))
 #else
@@ -48,13 +75,22 @@ net_send(int sock, char *buf, int len)
 #endif
       error_handle("send");
 
+#ifdef __linux__
+    usleep(SEND_DELAY);
+#endif
+
+#ifdef _WINDOWS_
+    Sleep(SEND_DELAY);
+#endif
+
   return;
 }
 
 void
 data_recv(int sock, char *buf)
 {
-  int len, fsize, cnt;
+  int len, fsize;
+  register int cnt;
   assert(NULL != buf);
   
   do

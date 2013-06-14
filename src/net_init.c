@@ -108,7 +108,7 @@ init_socket_parms()
       break;
     sleep(DELAY);
   }
-
+  fprintf(stdout, "connected.\n");
   
   return;
 }

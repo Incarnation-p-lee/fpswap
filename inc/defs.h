@@ -10,13 +10,14 @@
 #define SEND_DELAY      8
 #define DELAY           2
 #define SPLITER         ":"
+#define FREAD_LEN       (1024 << 10)
 
 typedef enum OPERATION{
   NA, PUT, GET, CONT, EXIT,
 }OPT;
 
 /* net related */
-#define BUFFER_LEN      (1024 << 6)
+#define BUFFER_LEN      FREAD_LEN
 #define IP_LENGTH       16
 #define FILE_CONFIG     "net.conf"
 

@@ -9,6 +9,8 @@ extern FILE *
 file_create(char*);
 extern void
 file_write(char*, int);
+extern int
+file_buf(FILE*);
 
 extern char rev_buf[BUFFER_LEN];
 extern struct sockaddr_in addr_rmt;
@@ -21,13 +23,14 @@ extern int local_port;
 extern int remote_port;
 extern char local_ip[IP_LENGTH];
 extern char remote_ip[IP_LENGTH];
+extern char *send_buf;
 
 void
 init_socket(void);
 void
 data_recv(int, char*);
 void
-data_send(int, char*, int);
+data_send(char*, char*, int);
 void
 net_setup(void);
 static void *
@@ -40,5 +43,7 @@ static void
 net_recv_write(int, char*, int);
 static int
 net_setup_handle(char*, int, FILE*);
+static void
+frame_send(int, char*, int);
 
 #endif
