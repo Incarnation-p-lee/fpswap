@@ -8,6 +8,7 @@ void init_socket()
 {
   net_setup();
   init_socket_parms();
+  fprintf(stdout, "connected.\n");
 
   return;
 }
@@ -108,7 +109,6 @@ init_socket_parms()
       break;
     sleep(DELAY);
   }
-  fprintf(stdout, "connected.\n");
   
   return;
 }

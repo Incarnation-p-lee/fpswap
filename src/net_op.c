@@ -11,7 +11,7 @@ data_send(char *fname, char *buf,
   FILE *filep;
   int fsize;
   register int index;
-  assert(NULL != fname && NULL == fname);
+  assert(NULL != fname && NULL == buf);
  
   
   filep = fopen(fname, "r");
