@@ -35,7 +35,8 @@ data_send(char *fname, char *buf,
     fprintf(stdout, ".");
   }
   
-  fprintf(stdout, "File sended.\n");
+  fprintf(stdout, "\nFile sended %d KB.\n", 
+    fsize >> 10);
   fclose(filep);
   free(buf);
   
