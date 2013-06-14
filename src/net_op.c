@@ -14,7 +14,7 @@ data_send(char *fname, char *buf,
   assert(NULL != fname && NULL == buf);
  
   
-  filep = fopen(fname, "r");
+  filep = fopen(fname, "rb");
   fsize = file_buf(filep);
   *(int*)(fname + LENGTH_INDEX) = fsize;
   net_send(sock, fname, FILENAME_LEN);
@@ -32,7 +32,6 @@ data_send(char *fname, char *buf,
     fread(buf, FREAD_LEN, 1, filep);
     frame_send(sock, buf, FREAD_LEN);
     index += FREAD_LEN;
-    fprintf(stdout, ".");
   }
   
   fprintf(stdout, "\nFile sended %d KB.\n", 
@@ -46,26 +45,30 @@ data_send(char *fname, char *buf,
 static void
 frame_send(int sock, char *buf, int len)
 {
-  register int index;
+  register int index, cnt;
   assert(NULL != buf && len > 0);
   
   index = len % SEND_LEN;
   if(0 != index)
     net_send(sock, buf, index);
-  
+
+  cnt = 0;
   while(len != index)
   {
     net_send(sock, buf + index, SEND_LEN);
     index += SEND_LEN;
-  }
+	if(0 == cnt % SEND_CNT)
 #ifdef __linux__
-  usleep(SEND_DELAY);
+      usleep(SEND_DELAY);
 #endif
 
 #ifdef _WINDOWS_
-  Sleep(SEND_DELAY);
+      Sleep(SEND_DELAY);
 #endif
+    cnt++;
+  }
 
+  fprintf(stdout, ".");
   return;
 }
 
@@ -78,14 +81,13 @@ net_send(int sock, char *buf, int len)
 #else 
 
 #ifdef WIN32
-	  MSG_OOB))
+	  MSG_DONTROUTE))
 #else
 #pragma message("UNKNOWN PLATFORM.\n")
     0))
 #endif
 #endif
       error_handle("send");
-
 
   return;
 }

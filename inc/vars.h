@@ -26,6 +26,8 @@ int sock_clt;
 #ifdef _WINDOWS_
 SOCKET sock_srv;
 SOCKET sock_clt;
+SYSTEMTIME start;
+SYSTEMTIME  end;
 #endif
 
 #endif
