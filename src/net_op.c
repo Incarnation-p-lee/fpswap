@@ -11,7 +11,7 @@ data_send(char *fname, char *buf,
   FILE *filep;
   int fsize;
   register int index;
-  assert(NULL != buf && NULL != fname);
+  assert(NULL != fname && NULL == fname);
  
   
   filep = fopen(fname, "r");
@@ -19,22 +19,23 @@ data_send(char *fname, char *buf,
   *(int*)(fname + LENGTH_INDEX) = fsize;
   net_send(sock, fname, FILENAME_LEN);
 
-  send_buf = (char*)malloc(FREAD_LEN);
+  buf = (char*)malloc(FREAD_LEN);
   index = fsize % FREAD_LEN;
   if(0 != index)
   {
-    fread(send_buf, index, 1, filep);
-    frame_send(sock, send_buf, index);
+    fread(buf, index, 1, filep);
+    frame_send(sock, buf, index);
   }
   
   while(fsize != index)
   {
-    fread(send_buf, FREAD_LEN, 1, filep);
-    frame_send(sock, send_buf, FREAD_LEN);
+    fread(buf, FREAD_LEN, 1, filep);
+    frame_send(sock, buf, FREAD_LEN);
     index += FREAD_LEN;
   }
 
   fclose(filep);
+  free(buf);
   
   return;
 }

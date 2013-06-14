@@ -23,7 +23,6 @@ extern int local_port;
 extern int remote_port;
 extern char local_ip[IP_LENGTH];
 extern char remote_ip[IP_LENGTH];
-extern char *send_buf;
 
 void
 init_socket(void);
