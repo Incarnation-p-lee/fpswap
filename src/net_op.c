@@ -95,13 +95,14 @@ data_recv(int sock, char *buf)
 {
   int len, fsize;
   register int cnt;
+  unsigned long long delta_usec;
   assert(NULL != buf);
   
   do
   {
     len = recv(sock, buf,
       FILENAME_LEN, MSG_WAITALL);
-    if(-1 == len)
+    if(FILENAME_LEN != len)
       error_handle("recv");
 
     fsize = *(int*)(buf + LENGTH_INDEX);
@@ -110,7 +111,9 @@ data_recv(int sock, char *buf)
     
     file_create(buf);
     cnt = fsize % BUFFER_LEN;
+    memset(buf, 0, FILENAME_LEN);
 
+    TIME_START;
     if(0 != cnt)
       net_recv_write(sock, buf, cnt);
 
@@ -119,9 +122,12 @@ data_recv(int sock, char *buf)
       net_recv_write(sock, buf, BUFFER_LEN);
       cnt += BUFFER_LEN;
     }
-   
-    fprintf(stdout, "\nReceived, %d KB.\n",
-      fsize >> 10);
+    delta_usec = TIME_END >> 10;   /* milli seconds */
+
+    fprintf(stdout, "\nReceived, %d KB, %fMB/s.\n",
+      fsize >> 10, 
+      (double)(fsize >> 10) / (delta_usec));
+    fflush(stdout);
     fclose(fwriter);
   }while(1);
   return;
@@ -148,12 +154,13 @@ net_recv_write(int sock, char *buf, int len)
   {
     tmp = recv(sock, buf + index, 
       SEND_LEN, MSG_WAITALL);
-    if(-1 == tmp)
+    if(SEND_LEN != tmp)
       error_handle("recv");
     file_write(buf + index, SEND_LEN);
     index += SEND_LEN;
   }
   fprintf(stdout, ".");
+  fflush(stdout);
 
   return;
 }

@@ -9,11 +9,27 @@ extern char *send_buf;
 extern char command_line[COMMAND_LEN];
 
 
+#ifdef __linux__
+extern struct timeval start;
+extern struct timeval end;
+#endif
+
+#ifdef _WINDOWS_
+extern SYSTEM start;
+extern SYSTEM end;
+#endif
+
+
 void
 error_handle(const char *);
 void
 env_reset(void);
 static void
 buffer_clearup(void);
+void
+get_time_start(void);
+unsigned long long
+get_time_end(void);
+
 
 #endif

@@ -25,4 +25,8 @@ typedef enum OPERATION{
 #define LISTEN_COUNT    3
 #define SEND_LEN        1024
 
+
+#define TIME_START      get_time_start()
+#define TIME_END        get_time_end()
+
 #endif

@@ -21,11 +21,15 @@ FILE *fwriter;
 #ifdef __linux__
 int sock_srv;
 int sock_clt;
+struct timeval start;
+struct timeval end;
 #endif
 
 #ifdef _WINDOWS_
 SOCKET sock_srv;
 SOCKET sock_clt;
+SYSTEMTIME start;
+SYSTEMTIME end;
 #endif
 
 #endif

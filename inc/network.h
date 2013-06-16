@@ -11,6 +11,10 @@ extern void
 file_write(char*, int);
 extern int
 file_buf(FILE*);
+extern void
+get_time_start(void);
+extern unsigned long long
+get_time_end(void);
 
 extern char rev_buf[BUFFER_LEN];
 extern struct sockaddr_in addr_rmt;

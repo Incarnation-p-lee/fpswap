@@ -22,7 +22,7 @@ file_create(char *fname)
 {
   assert(NULL != fname);
   
-  fwriter = fopen(fname, "w");
+  fwriter = fopen(fname, "wb");
   if(NULL == fwriter)
     error_handle("fopen");
   
