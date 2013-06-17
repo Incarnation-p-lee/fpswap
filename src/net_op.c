@@ -82,13 +82,13 @@ net_send(int sock, char *buf, int len)
 #else 
 
 #ifdef WIN32
-	  MSG_NOTROUTE))
+	  MSG_DONTROUTE)
 #else
 #pragma message("UNKNOWN PLATFORM.\n")
     0))
 #endif
 #endif
-      error_handle("send");
+    error_handle("send");
 
   return;
 }
@@ -148,7 +148,7 @@ net_recv_write(int sock, char *buf, int len)
   {
     tmp = recv(sock, buf, 
       index, MSG_WAITALL);
-    if(-1 == tmp)
+    if(index != tmp)
       error_handle("recv");
     file_write(buf, index);
   }
