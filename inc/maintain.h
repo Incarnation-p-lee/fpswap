@@ -15,8 +15,8 @@ extern struct timeval end;
 #endif
 
 #ifdef _WINDOWS_
-extern SYSTEM start;
-extern SYSTEM end;
+extern SYSTEMTIME start;
+extern SYSTEMTIME end;
 #endif
 
 

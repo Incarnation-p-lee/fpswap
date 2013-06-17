@@ -46,25 +46,28 @@ data_send(char *fname, char *buf,
 static void
 frame_send(int sock, char *buf, int len)
 {
-  register int index;
+  register int index, cnt;
   assert(NULL != buf && len > 0);
   
   index = len % SEND_LEN;
   if(0 != index)
     net_send(sock, buf, index);
   
+  cnt = 0;
   while(len != index)
   {
     net_send(sock, buf + index, SEND_LEN);
     index += SEND_LEN;
-  }
+    cnt++;
+    if(0 == cnt % SEND_CNT)
 #ifdef __linux__
-  usleep(SEND_DELAY);
+      usleep(SEND_DELAY);
 #endif
 
 #ifdef _WINDOWS_
-  Sleep(SEND_DELAY);
+      Sleep(SEND_DELAY);
 #endif
+  }
 
   return;
 }
@@ -72,19 +75,21 @@ frame_send(int sock, char *buf, int len)
 static void
 net_send(int sock, char *buf, int len)
 {
-  if(len != send(sock, buf, len,
+  int tmp;
+  //if(len != 
+  tmp = send(sock, buf, len,
 #ifdef __linux__
 	  MSG_MORE))
 #else 
 
 #ifdef WIN32
-	  MSG_OOB))
+	  MSG_DONTROUTE);
 #else
 #pragma message("UNKNOWN PLATFORM.\n")
     0))
 #endif
 #endif
-      error_handle("send");
+ //     error_handle("send");
 
 
   return;
@@ -145,7 +150,7 @@ net_recv_write(int sock, char *buf, int len)
   {
     tmp = recv(sock, buf, 
       index, MSG_WAITALL);
-    if(-1 == tmp)
+    if(index != tmp)
       error_handle("recv");
     file_write(buf, index);
   }
