@@ -4,11 +4,12 @@
 #define FILENAME_LEN    128
 #define LENGTH_INDEX    124
 #define COMMAND_LEN     128
+#define SEND_CNT        64
 #define NUL             (char)0
 #define SPACE           " "
 #define READ_LEN        4096
-#define SEND_DELAY      1
-#define DELAY           2
+#define SEND_DELAY      10
+#define DELAY           1
 #define SPLITER         ":"
 #define FREAD_LEN       (1024 << 10)
 

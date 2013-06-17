@@ -33,6 +33,7 @@ data_send(char *fname, char *buf,
     frame_send(sock, buf, FREAD_LEN);
     index += FREAD_LEN;
     fprintf(stdout, ".");
+    fflush(stdout);
   }
   
   fprintf(stdout, "\nFile sended %d KB.\n", 
@@ -46,25 +47,28 @@ data_send(char *fname, char *buf,
 static void
 frame_send(int sock, char *buf, int len)
 {
-  register int index;
+  register int index, cnt;
   assert(NULL != buf && len > 0);
   
   index = len % SEND_LEN;
   if(0 != index)
     net_send(sock, buf, index);
   
+  cnt = 0;
   while(len != index)
   {
     net_send(sock, buf + index, SEND_LEN);
     index += SEND_LEN;
-  }
+    cnt++;
+    if(0 == cnt % SEND_CNT)
 #ifdef __linux__
-  usleep(SEND_DELAY);
+      usleep(SEND_DELAY);
 #endif
 
 #ifdef _WINDOWS_
-  Sleep(SEND_DELAY);
+      Sleep(SEND_DELAY);
 #endif
+  }
 
   return;
 }
@@ -74,18 +78,17 @@ net_send(int sock, char *buf, int len)
 {
   if(len != send(sock, buf, len,
 #ifdef __linux__
-	  MSG_MORE))
+	  MSG_DONTROUTE))
 #else 
 
 #ifdef WIN32
-	  MSG_OOB))
+	  MSG_NOTROUTE))
 #else
 #pragma message("UNKNOWN PLATFORM.\n")
     0))
 #endif
 #endif
       error_handle("send");
-
 
   return;
 }
@@ -101,7 +104,7 @@ data_recv(int sock, char *buf)
   do
   {
     len = recv(sock, buf,
-      FILENAME_LEN, MSG_WAITALL);
+      FILENAME_LEN, MSG_DONTROUTE);
     if(FILENAME_LEN != len)
       error_handle("recv");
 
@@ -122,11 +125,11 @@ data_recv(int sock, char *buf)
       net_recv_write(sock, buf, BUFFER_LEN);
       cnt += BUFFER_LEN;
     }
-    delta_usec = TIME_END >> 10;   /* milli seconds */
+    delta_usec = TIME_END / 1000;   /* milli seconds */
 
-    fprintf(stdout, "\nReceived, %d KB, %fMB/s.\n",
-      fsize >> 10, 
-      (double)(fsize >> 10) / (delta_usec));
+    fprintf(stdout, "\nReceived, %d B, %fMB/s.\n",
+      fsize, 
+      ((double)fsize / 1000) / (delta_usec));
     fflush(stdout);
     fclose(fwriter);
   }while(1);
