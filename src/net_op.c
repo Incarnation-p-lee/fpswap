@@ -32,8 +32,6 @@ data_send(char *fname, char *buf,
     fread(buf, FREAD_LEN, 1, filep);
     frame_send(sock, buf, FREAD_LEN);
     index += FREAD_LEN;
-    fprintf(stdout, ".");
-    fflush(stdout);
   }
   
   fprintf(stdout, "\nFile sended %d KB.\n", 
@@ -70,6 +68,8 @@ frame_send(int sock, char *buf, int len)
 #endif
   }
 
+  fprintf(stdout, ".");
+  fflush(stdout);
   return;
 }
 
