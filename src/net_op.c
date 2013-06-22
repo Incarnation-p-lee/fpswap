@@ -76,18 +76,28 @@ frame_send(int sock, char *buf, int len)
 static void
 net_send(int sock, char *buf, int len)
 {
-  if(len != send(sock, buf, len,
-#ifdef __linux__
-	  MSG_DONTROUTE))
-#else 
+  register int send_size = 0;
 
-#ifdef WIN32
-	  MSG_DONTROUTE)
-#else
-#pragma message("UNKNOWN PLATFORM.\n")
-    0))
-#endif
-#endif
+  while(len > 0)
+  {
+    send_size = send(sock, buf,
+      len, MSG_DONTROUTE);
+
+    if(-1 == send_size)
+    {
+      if(EINTR == errno)
+        send_size = 0;
+      else
+        error_handle("send");
+    }
+    else
+    {
+      len -= send_size;
+      buf += send_size;
+    }
+  }
+
+  if(0 != len)
     error_handle("send");
 
   return;
@@ -96,17 +106,14 @@ net_send(int sock, char *buf, int len)
 void
 data_recv(int sock, char *buf)
 {
-  int len, fsize;
+  int fsize;
   register int cnt;
   unsigned long long delta_usec;
   assert(NULL != buf);
   
   do
   {
-    len = recv(sock, buf,
-      FILENAME_LEN, MSG_DONTROUTE);
-    if(FILENAME_LEN != len)
-      error_handle("recv");
+    net_recv(sock, buf, FILENAME_LEN);
 
     fsize = *(int*)(buf + LENGTH_INDEX);
     fprintf(stdout, "File Name: %s.\n"
@@ -139,31 +146,59 @@ data_recv(int sock, char *buf)
 static void
 net_recv_write(int sock, char *buf, int len)
 {
-  int index, tmp;
+  int padding;
 
   memset(buf, 0, FILENAME_LEN);
-  index = len % SEND_LEN; 
+  padding = len % SEND_LEN; 
 
-  if(0 != index)
+  if(0 != padding)
   {
-    tmp = recv(sock, buf, 
-      index, MSG_WAITALL);
-    if(index != tmp)
-      error_handle("recv");
-    file_write(buf, index);
+    net_recv(sock, buf, padding);
+    file_write(buf, padding);
+    buf += padding;
+    len -= padding;
   }
 
-  while(len != index)
+  while(len != 0)
   {
-    tmp = recv(sock, buf + index, 
-      SEND_LEN, MSG_WAITALL);
-    if(SEND_LEN != tmp)
-      error_handle("recv");
-    file_write(buf + index, SEND_LEN);
-    index += SEND_LEN;
+    net_recv(sock, buf, SEND_LEN);
+    file_write(buf, SEND_LEN);
+    buf += SEND_LEN;
+    len -= SEND_LEN;
   }
+
   fprintf(stdout, ".");
   fflush(stdout);
+
+  return;
+}
+
+static void
+net_recv(int sock, char *buf, int len)
+{
+  register int recv_size = 0;
+
+  while(len > 0)
+  {
+     recv_size = recv(sock, buf,
+       len, MSG_WAITALL);
+
+     if(-1 == recv_size)
+     {
+       if(EINTR == errno)
+         recv_size = 0;
+       else
+         error_handle("recv");
+     }
+     else
+     {
+       len -= recv_size;
+       buf += recv_size;
+     }
+  }
+  
+  if(0 != len)
+    error_handle("recv");
 
   return;
 }

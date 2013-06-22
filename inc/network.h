@@ -3,8 +3,6 @@
 
 extern void
 error_handle(const char*);
-extern void
-data_recv(int, char*);
 extern FILE *
 file_create(char*);
 extern void
@@ -21,12 +19,12 @@ extern struct sockaddr_in addr_rmt;
 extern struct sockaddr_in addr_loc;
 extern int sock_clt;
 extern int sock_srv;
-extern char put_filename[FILENAME_LEN];
-extern FILE *fwriter;
 extern int local_port;
 extern int remote_port;
 extern char local_ip[IP_LENGTH];
 extern char remote_ip[IP_LENGTH];
+extern char put_filename[FILENAME_LEN];
+extern FILE *fwriter;
 
 void
 init_socket(void);
@@ -48,5 +46,7 @@ static int
 net_setup_handle(char*, int, FILE*);
 static void
 frame_send(int, char*, int);
+static void
+net_recv(int, char*, int);
 
 #endif

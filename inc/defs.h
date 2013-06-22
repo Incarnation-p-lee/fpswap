@@ -4,7 +4,7 @@
 #define FILENAME_LEN    128
 #define LENGTH_INDEX    124
 #define COMMAND_LEN     128
-#define SEND_CNT        64
+#define SEND_CNT        128
 #define NUL             (char)0
 #define SPACE           " "
 #define READ_LEN        4096
